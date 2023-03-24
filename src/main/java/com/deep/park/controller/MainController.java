@@ -21,16 +21,14 @@ public class MainController {
 
     @PostMapping("/members")
     @ResponseBody
-    public Member joinMember(@RequestHeader Map<String, String> header){
+    public void joinMember(@RequestHeader Map<String, String> header){
         Member m = new Member();
-        m.setId(Long.parseLong(header.get("id")));
+        m.setId(0L);
         m.setName(header.get("name"));
 
         memberService.join(m);
 
         System.out.println(m + "saved");
-
-        return m;
     }
 
     @GetMapping("/members")
