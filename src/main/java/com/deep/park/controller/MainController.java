@@ -23,12 +23,9 @@ public class MainController {
     @ResponseBody
     public void joinMember(@RequestHeader Map<String, String> header){
         Member m = new Member();
-        m.setId(0L);
         m.setName(header.get("name"));
 
         memberService.join(m);
-
-        System.out.println(m + "saved");
     }
 
     @GetMapping("/members")

@@ -11,13 +11,12 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-    @Autowired
     MemberRepository memberRepository;
 
-//    @Autowired
-//    public MemberService(MemberRepository memberRepository){
-//        this.memberRepository = memberRepository;
-//    }
+    @Autowired
+    public MemberService(MemberRepository memberRepository){
+        this.memberRepository = memberRepository;
+    }
 
     @Transactional
     public void join(Member member){
@@ -31,8 +30,4 @@ public class MemberService {
     public Optional<Member> findOneMember(Long id){
         return memberRepository.findById(id);
     }
-
-//    public void findOne(Long id){
-//        memberRepository.findOne(id);
-//    }
 }
