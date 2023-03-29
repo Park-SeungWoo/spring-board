@@ -11,23 +11,23 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-    MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository){
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
     @Transactional
-    public void join(Member member){
+    public void join(Member member) {
         memberRepository.save(member);
     }
 
-    public List<Member> findAllMember(){
+    public List<Member> findAllMember() {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOneMember(Long id){
+    public Optional<Member> findOneMember(Long id) {
         return memberRepository.findById(id);
     }
 }
