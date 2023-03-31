@@ -1,46 +1,9 @@
-# Spring Boot로 게시판을 만들어보기 위한 repo입니다.
+# 이 레포지토리는 스프링을 공부하기 위한 공간입니다.
 
-## stack
-- springboot, mysql, jpa
+## 진행중인 project
+기존에 [board_test](https://github.com/Park-SeungWoo/spring-board/board_test)를 이용해 공부중이었으나 새로 [CloneBoard](https://github.com/Park-SeungWoo/spring-board/CloneBoard) 프로젝트를 만들어 다시 실습중입니다.
 
-## 현재 구현 상황
-
-rest api로 구현한 상태이고 postman으로 jpa 연동 테스트 완료.
-backend를 rest api로 모두 구현한 후 front 구현 예정(flutter or react)
-
-### spring
-- 유저생성
-- 유저 모두 보기
-- id로 유저 찾기
-- 게시글 생성
-- 게시글 모두 보기
-- 유저 id로 해당 유저가 게시한 글 보기
-
-### db
-- member table 생성 
-```roomsql
-CREATE TABLE member(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    pw VARCHAR(255) NOT NULL
-);
-```
-
-- post table 생성
-```roomsql
-CREATE TABLE post(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    creator_id BIGINT NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    content VARCHAR(255) NOT NULL,
-    CONSTRAINT member_postfk FOREIGN KEY (creator_id) REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE
-);
-```
-ON UPDATE CASCADE: reference로 등록된 부모 데이터가 변경되면 자식 데이터도 함께 변경<br/>
-ON DELETE CASCADE: 부모 데이터 삭제시 자식 데이터 함께 삭제
-
-
-## 구조
-동작 구조 도식화 후 업로드 예정 <br/>
-
-[//]: # (![structure]&#40;./assets/structure.png&#41;)
+## 이론, 내용 정리 노션
+[노션(read-only)](https://spiky-house-f8d.notion.site/Spring-2a22644edb5245d5b8b84fc9c523cc94) <br/>
+아직 정리하지 않은 내용이 많습니다. <br/>
+추후에 하나씩 정리해서 올릴 예정입니다.
