@@ -3,6 +3,7 @@ package com.example.cloneboard.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Table(name = "boards")  // naming rules
 @Getter
 @NoArgsConstructor
+@DynamicUpdate  // dirty checking으로 update query 생성 시 변경된 부분만 변경하도록 함
 public class BoardEntity {
 
     @Id
@@ -21,6 +23,11 @@ public class BoardEntity {
     private String content;
     @Column
     private String nickname;
+
+    public void changeTitleAndContent(String title, String content){
+        this.title = title != null ? title : this.title;
+        this.content = content != null ? content : this.content;
+    }
 
     @Builder
     public BoardEntity(String title, String content, String nickname){

@@ -14,28 +14,33 @@ import java.util.Optional;
 public class MemberController {
     MemberService memberService;
 
-    @Autowired
+//    @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
-    @PostMapping("/")
-    public void joinMember(@RequestHeader Map<String, String> header) {
-        Member m = new Member();
-        m.setName(header.get("name"));
-        m.setPw(header.get("pw"));
-
-        memberService.join(m);
-    }
-
     @GetMapping("/")
-    public List<Member> findAllMember() {
-        return memberService.findAllMember();
+    public String save(){
+        return memberService.save();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Member> findOneById(@PathVariable("id") Long id) {
-        return memberService.findOneMember(id);
-    }
+//    @PostMapping("/")
+//    public void joinMember(@RequestHeader Map<String, String> header) {
+//        Member m = new Member();
+//        m.setName(header.get("name"));
+//        m.setPw(header.get("pw"));
+//
+//        memberService.join(m);
+//    }
+//
+//    @GetMapping("/")
+//    public List<Member> findAllMember() {
+//        return memberService.findAllMember();
+//    }
+//
+//    @GetMapping("/{id}")
+//    public Optional<Member> findOneById(@PathVariable("id") Long id) {
+//        return memberService.findOneMember(id);
+//    }
 
 }

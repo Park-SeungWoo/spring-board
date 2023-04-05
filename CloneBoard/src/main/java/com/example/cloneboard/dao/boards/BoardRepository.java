@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     List<BoardEntity> findByNickname(String nickname);
+    BoardEntity findByIdAndNickname(Long id, String nickname);
 }

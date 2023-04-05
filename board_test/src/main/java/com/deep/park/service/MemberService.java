@@ -9,25 +9,27 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+//@Service
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    @Autowired
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
-    @Transactional
-    public void join(Member member) {
-        memberRepository.save(member);
+    public String save(){
+        return "save";
     }
-
-    public List<Member> findAllMember() {
-        return memberRepository.findAll();
-    }
-
-    public Optional<Member> findOneMember(Long id) {
-        return memberRepository.findById(id);
-    }
+//    @Transactional
+//    public void join(Member member) {
+//        memberRepository.save(member);
+//    }
+//
+//    public List<Member> findAllMember() {
+//        return memberRepository.findAll();
+//    }
+//
+//    public Optional<Member> findOneMember(Long id) {
+//        return memberRepository.findById(id);
+//    }
 }

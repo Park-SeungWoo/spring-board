@@ -2,12 +2,14 @@ package com.example.cloneboard.controller.boards;
 
 import com.example.cloneboard.dto.boards.BoardResponseDto;
 import com.example.cloneboard.dto.boards.BoardSaveRequestDto;
+import com.example.cloneboard.dto.boards.BoardUpdateRequestDto;
 import com.example.cloneboard.service.posts.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Restfull 하게 patch, delete등도 사용함. 실무에선 get, post 이외의 것들은 잘 안쓴다고 함
 @RestController
 @RequestMapping("/boards")
 public class BoardController {
@@ -32,7 +34,10 @@ public class BoardController {
         return boardService.findAll();
     }
 
-    // update title, content by nickname
+    @PatchMapping("/{nickname}/{id}")  // patch는 부분변경, put은 전체데이터 갈아끼우기(patch는 멱등성을 보장해주진 않음)
+    public BoardResponseDto update(@PathVariable Long id, @PathVariable String nickname, @RequestBody BoardUpdateRequestDto boardUpdateRequestDto){
+        return boardService.update(id, nickname, boardUpdateRequestDto);
+    }
 
     @DeleteMapping
     public void delete(@RequestHeader(value = "id") Long id){
