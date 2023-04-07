@@ -1,7 +1,7 @@
-package com.example.cloneboard.service.users;
+package com.example.auth.service.users;
 
 import com.example.cloneboard.dao.users.UserRepository;
-import com.example.cloneboard.dto.users.UserAuthenticationRequestDto;
+import com.example.auth.dto.users.UserAuthenticationRequestDto;
 import com.example.cloneboard.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;

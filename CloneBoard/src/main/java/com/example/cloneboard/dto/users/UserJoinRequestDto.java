@@ -30,6 +30,7 @@ public class UserJoinRequestDto {
                 .password(this.password)
                 .nickname(this.nickname)
                 .introduce(this.introduce)
+                .postSequence(1L)
                 .build();
     }
 }

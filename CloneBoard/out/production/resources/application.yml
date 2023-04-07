@@ -10,9 +10,14 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect  # MySQL8Dialect 이부분이 mysql db라는걸 알려줌, h2~~ 면 h2 씀
     hibernate:   # jPA의 근간
-      ddl-auto: update  # create, create-drop, update, validate, none // 사실상 설정 안하면 됨
+      ddl-auto: create  # create, create-drop, update, validate, none // 사실상 설정 안하면 됨
     properties:
       hibernate:
         enable_lazy_load_no_trans: true
         show_sql: true  # query 보여주는것
         format_sql: true  #
+
+jwt:
+  header: Authorization
+  secret: 54397225e6e1676523acdaba48df130881ab3474cde82e08ceb401637ca0505ed0cc62477b843723d2439648b117619f7d939954bf317d0474394eb261ba1ba9
+  access-token-validity-in-seconds: 60000 # 1 min

@@ -1,4 +1,4 @@
-package com.example.cloneboard.dto.users;
+package com.example.auth.dto.users;
 
 import com.example.cloneboard.entity.UserEntity;
 import lombok.Getter;

@@ -16,6 +16,8 @@ public class BoardEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // db한테 id관리(pk) 위임하겠다. (mysql은 이거, 다른 것들은 sequence등으로 해야 정확한 쿼리 넣음)
     private Long id;
+    @Column(name = "post_id")
+    private Long postId;
     @Column
     private String title;
     @Column

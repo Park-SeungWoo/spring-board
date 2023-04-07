@@ -1,6 +1,6 @@
-package com.example.cloneboard.service.users;
+package com.example.auth.service.users;
 
-import com.example.cloneboard.dto.users.UserAuthenticationRequestDto;
+import com.example.auth.dto.users.UserAuthenticationRequestDto;
 
 public interface UserAuthenticationService {
     public String userAuthentication(UserAuthenticationRequestDto userAuthenticationRequestDto);
