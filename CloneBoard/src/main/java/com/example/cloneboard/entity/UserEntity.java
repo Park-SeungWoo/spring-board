@@ -3,6 +3,7 @@ package com.example.cloneboard.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Table(name="users")
 @Getter
 @NoArgsConstructor
+@ToString  // for tests
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // db한테 id관리 위임하겠다.

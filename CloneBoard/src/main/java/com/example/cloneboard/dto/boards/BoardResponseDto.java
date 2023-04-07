@@ -1,9 +1,11 @@
 package com.example.cloneboard.dto.boards;
 
 import com.example.cloneboard.entity.BoardEntity;
+import lombok.Data;
 import lombok.Getter;
 
 @Getter
+//@Data // getter, setter automatically add
 public class BoardResponseDto {
     private Long id;
     private String title;
