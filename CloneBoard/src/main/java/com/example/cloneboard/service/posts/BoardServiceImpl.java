@@ -28,10 +28,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public ResponseEntity<String> post(BoardSaveRequestDto boardSaveRequestDto, String token){  // save a post
+    public ResponseEntity<String> post(BoardSaveRequestDto boardSaveRequestDto, UserAuthorizedDto authorizedUser){  // save a post
         try {
-            UserAuthorizedDto user = userAuthorizationService.validate(token);
-            if (user != null && user.getNickname().equals(boardSaveRequestDto.getNickname())) {
+            if (authorizedUser.getNickname().equals(boardSaveRequestDto.getNickname())) {
                 UserEntity userEntity = userRepository.findByNickname(boardSaveRequestDto.getNickname());  // 유저별로 포스트 id 다르게 하기 위해 postSequence 꺼내오기 (전체 id는 따로 있음)
                 boardSaveRequestDto.setPostId(userEntity.getPostSequence());  // user의 postSequence를 postId로 함
                 userEntity.addPostSequence(); // postSequence 사용했으니 하나 플러스해주기
@@ -58,10 +57,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public ResponseEntity<String> delete(Long id, String nickname, String token){  // delete a post by nickname and post id
+    public ResponseEntity<String> delete(Long id, String nickname, UserAuthorizedDto authorizedUser){  // delete a post by nickname and post id
         try {
-            UserAuthorizedDto user = userAuthorizationService.validate(token);
-            if (user != null && user.getNickname().equals(nickname)) {
+            if (authorizedUser.getNickname().equals(nickname)) {
                 boardRepository.delete(boardRepository.findByPostIdAndNickname(id, nickname));
                 return ResponseEntity.ok("성공: 성공적으로 삭제했습니다.");
             } else
@@ -73,7 +71,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public ResponseEntity<String> update(Long id, String nickname, BoardUpdateRequestDto boardUpdateRequestDto, String token) {
+    public ResponseEntity<String> update(Long id, String nickname, BoardUpdateRequestDto boardUpdateRequestDto, UserAuthorizedDto authorizedUser) {
         /*
         Transactional annotation을 사용하면 dirty checking을 해 findBy~로 데이터를 조회한 시점에 snapshot을 남겨(영속성 context에 저장) transaction이 끝나는 시점에 데이터를 비교해 변경사항이 있으면 데이터를 변경해줌.
         기본적으로 dirty checking을 통해 생성된 update query는 모든 필드를 변경, entity에 @DynamicUpdate를 하면 변경된것만 변경해줌
@@ -83,8 +81,7 @@ public class BoardServiceImpl implements BoardService {
         1차 캐싱 후 찾아서 있으면 db까지 안가고 바꾸고 마지막에 결과만 db로 감(영속성 컨텍스트)
          */
         try {
-            UserAuthorizedDto user = userAuthorizationService.validate(token);  // 올바른 토큰이면 해당 유저 정보 담긴 객체 반환
-            if (user != null && user.getNickname().equals(nickname)) {
+            if (authorizedUser.getNickname().equals(nickname)) {
                 BoardEntity post = boardRepository.findByPostIdAndNickname(id, nickname);
                 post.changeTitleAndContent(boardUpdateRequestDto.getTitle(), boardUpdateRequestDto.getContent());
                 return ResponseEntity.ok("성공: 성공적으로 업데이트 했습니다.");

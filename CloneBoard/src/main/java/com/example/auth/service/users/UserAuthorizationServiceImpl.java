@@ -22,6 +22,7 @@ public class UserAuthorizationServiceImpl implements UserAuthorizationService{
     @Override
     public UserAuthorizedDto validate(String userToken) {
         try {
+            // validate 다 하기
             String[] userDatas = userToken.split("%");
             UserEntity user = userRepository.findByNickname(userDatas[0]);
             if (userDatas[1].equals("Authorized") && user != null)

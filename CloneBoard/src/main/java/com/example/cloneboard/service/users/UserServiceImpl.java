@@ -40,10 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public ResponseEntity<String> delete(String email, String token){  // delete a user by email
+    public ResponseEntity<String> delete(String email, UserAuthorizedDto authorizedUser){  // delete a user by email
         try {
-            UserAuthorizedDto userAuthorizedDto = userAuthorizationService.validate(token);
-            if(userAuthorizedDto.getEmail().equals(email)) {
+            if(authorizedUser.getEmail().equals(email)) {
                 userRepository.deleteByEmail(email);
                 return ResponseEntity.ok("성공: 성공적으로 탈퇴했습니다.");
             } else {

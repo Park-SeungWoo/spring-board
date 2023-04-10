@@ -10,7 +10,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect  # MySQL8Dialect 이부분이 mysql db라는걸 알려줌, h2~~ 면 h2 씀
     hibernate:   # jPA의 근간
-      ddl-auto: create  # create, create-drop, update, validate, none // 사실상 설정 안하면 됨
+      ddl-auto: update  # create, create-drop, update, validate, none // 사실상 설정 안하면 됨
     properties:
       hibernate:
         enable_lazy_load_no_trans: true
