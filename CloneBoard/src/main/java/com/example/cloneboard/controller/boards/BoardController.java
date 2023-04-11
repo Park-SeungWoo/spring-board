@@ -6,12 +6,9 @@ import com.example.cloneboard.dto.boards.BoardSaveRequestDto;
 import com.example.cloneboard.dto.boards.BoardUpdateRequestDto;
 import com.example.cloneboard.service.posts.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 // Restfull 하게 patch, delete등도 사용함. 실무에선 get, post 이외의 것들은 잘 안쓴다고 함
@@ -23,10 +20,9 @@ public class BoardController {
     @PostMapping
 //    @ModelAttribute  // param으로 들어온것들 Dto로 받을 수 있게 해줌
     public ResponseEntity<String> post(@RequestBody BoardSaveRequestDto boardSaveRequestDto,
-                                       ServletRequest req){
-        HttpServletRequest httpReq = (HttpServletRequest) req;
-        UserAuthorizedDto user = (UserAuthorizedDto) httpReq.getAttribute("userStatus");
-        return boardService.post(boardSaveRequestDto, user);
+                                       @RequestAttribute("userStatus") UserAuthorizedDto userAuthorizedDto
+                                       ){
+        return boardService.post(boardSaveRequestDto, userAuthorizedDto);
     }
 
     @GetMapping("/{nickname}")
@@ -43,19 +39,17 @@ public class BoardController {
     public ResponseEntity<String> update(@PathVariable Long id,
                                          @PathVariable String nickname,
                                          @RequestBody BoardUpdateRequestDto boardUpdateRequestDto,
-                                         ServletRequest req){
-        HttpServletRequest httpReq = (HttpServletRequest) req;
-        UserAuthorizedDto user = (UserAuthorizedDto) httpReq.getAttribute("userStatus");
-        return boardService.update(id, nickname, boardUpdateRequestDto, user);
+                                         @RequestAttribute("userStatus") UserAuthorizedDto userAuthorizedDto
+                                         ){
+        return boardService.update(id, nickname, boardUpdateRequestDto, userAuthorizedDto);
     }
 
     @DeleteMapping
     public ResponseEntity<String> delete(@RequestHeader(value = "id") Long id,
                                          @RequestHeader(value = "nickname") String nickname,
-                                         ServletRequest req){
-        HttpServletRequest httpReq = (HttpServletRequest) req;
-        UserAuthorizedDto user = (UserAuthorizedDto) httpReq.getAttribute("userStatus");
-        return boardService.delete(id, nickname, user);
+                                         @RequestAttribute("userStatus") UserAuthorizedDto userAuthorizedDto
+                                         ){
+        return boardService.delete(id, nickname, userAuthorizedDto);
     }
 
 }

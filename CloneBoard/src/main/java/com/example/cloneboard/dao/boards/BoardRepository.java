@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {  //
-//    List<BoardEntity> findByNickname(String nickname);
     BoardEntity findByPostIdAndNickname(Long id, String nickname);
 
     List<BoardEntity> findByNickname(String nickname);
+
+    void deleteByNickname(String nickname);
 }

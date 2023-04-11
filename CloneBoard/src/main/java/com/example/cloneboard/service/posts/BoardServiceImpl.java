@@ -37,7 +37,7 @@ public class BoardServiceImpl implements BoardService {
                 boardRepository.save(boardSaveRequestDto.toEntity());  // post저장
                 return ResponseEntity.ok("성공: 성공적으로 저장했습니다!");
             } else
-                return ResponseEntity.ok("실패: token이 유효하지 않거나 요청의 닉네임이 user정보와 다릅니다.");
+                return ResponseEntity.ok("실패: 요청의 닉네임이 user정보와 다릅니다.");
         } catch (Exception e) {
             return ResponseEntity.ok(e.getMessage());
         }
@@ -63,7 +63,7 @@ public class BoardServiceImpl implements BoardService {
                 boardRepository.delete(boardRepository.findByPostIdAndNickname(id, nickname));
                 return ResponseEntity.ok("성공: 성공적으로 삭제했습니다.");
             } else
-                return ResponseEntity.ok("실패: 유효한 Token이 아니거나 작성자가 아닙니다.");
+                return ResponseEntity.ok("실패: 작성자가 아닙니다.");
         } catch (Exception e) {
             return ResponseEntity.ok(e.getMessage());
         }
@@ -86,7 +86,7 @@ public class BoardServiceImpl implements BoardService {
                 post.changeTitleAndContent(boardUpdateRequestDto.getTitle(), boardUpdateRequestDto.getContent());
                 return ResponseEntity.ok("성공: 성공적으로 업데이트 했습니다.");
             } else
-                return ResponseEntity.ok("실패: 유효한 Token이 아니거나 작성자가 아닙니다.");  // 작성자가 아닐 때 return null
+                return ResponseEntity.ok("실패: 작성자가 아닙니다.");  // 작성자가 아닐 때 return null
         } catch (Exception e){
             return ResponseEntity.ok(e.getMessage());
         }

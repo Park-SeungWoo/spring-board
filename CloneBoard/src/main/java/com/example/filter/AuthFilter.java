@@ -2,19 +2,12 @@ package com.example.filter;
 
 import com.example.auth.dto.users.UserAuthorizedDto;
 import com.example.auth.service.users.UserAuthorizationService;
-import com.example.auth.service.users.UserAuthorizationServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.util.StreamUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class AuthFilter implements Filter {
@@ -57,13 +50,15 @@ public class AuthFilter implements Filter {
         String token = httpReq.getHeader("Authorization");
 
         // athorization
-        if(httpReq.getMethod().equals("GET") || httpReq.getRequestURI().equals("/users/login")){  // /login/~~ or GET method
+        if(httpReq.getMethod().equals("GET") ||
+                httpReq.getRequestURI().equals("/users/login") ||
+                (httpReq.getRequestURI().equals("/users") && httpReq.getMethod().equals("POST"))){  // /login/~~ or GET method or sign up
             chain.doFilter(request, response);
         } else{
             UserAuthorizedDto userStatus = userAuthorizationService.validate(token);
             if(userStatus == null){
                 HttpServletResponse httpRes = (HttpServletResponse) response;
-                httpRes.setStatus(403, "forbidden");
+                httpRes.setStatus(403, "Forbidden");
             } else {
                 httpReq.setAttribute("userStatus", userStatus);
                 chain.doFilter(request, response);
