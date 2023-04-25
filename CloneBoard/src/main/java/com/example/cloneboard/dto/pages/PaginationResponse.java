@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 @Getter
-public class PaginatedPosts<T> {
+public class PaginationResponse<T> {
     private T data;
     private PageInfo pageInfo;
 }

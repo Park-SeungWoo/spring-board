@@ -26,9 +26,15 @@ public class BoardController {
         return boardService.post(boardSaveRequestDto, userAuthorizedDto);
     }
 
+/* find ones
+    total 3 methods (overload)
+ */
     @GetMapping("/{nickname}")
     public ResponseEntity findOnes(@PathVariable String nickname){
-        return boardService.findOnesPagination(1, 10, nickname);
+        return new ResponseEntity(
+                boardService.findOnesPagination(1, 10, nickname),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping(value = "/{nickname}", params = {"page"})
@@ -36,7 +42,10 @@ public class BoardController {
             @PathVariable String nickname,
             @RequestParam int page
     ){
-        return boardService.findOnesPagination(page, 10, nickname);
+        return new ResponseEntity(
+                boardService.findOnesPagination(page, 10, nickname),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping(value = "/{nickname}", params = {"page", "size"})
@@ -45,19 +54,31 @@ public class BoardController {
             @RequestParam int page,
             @RequestParam int size
     ){
-        return boardService.findOnesPagination(page, size, nickname);
+        return new ResponseEntity(
+                boardService.findOnesPagination(page, size, nickname),
+                HttpStatus.OK
+        );
     }
 
+/* find all
+    total 3 methods (overload)
+ */
     @GetMapping
     public ResponseEntity findAll(){
-        return boardService.findAllPagination(1, 10);
+        return new ResponseEntity(
+                boardService.findAllPagination(1, 10),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping(params = {"page"})
     public ResponseEntity findAll(
             @RequestParam int page
     ){
-        return boardService.findAllPagination(page, 10);
+        return new ResponseEntity(
+                boardService.findAllPagination(page, 10),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping(params = {"page", "size"})
@@ -65,7 +86,10 @@ public class BoardController {
             @RequestParam int page,
             @RequestParam int size
     ){
-        return boardService.findAllPagination(page, size);
+        return new ResponseEntity(
+                boardService.findAllPagination(page, size),
+                HttpStatus.OK
+        );
     }
 
     @PatchMapping("/{nickname}/{id}")  // patch는 부분변경, put은 전체데이터 갈아끼우기(patch는 멱등성을 보장해주진 않음)

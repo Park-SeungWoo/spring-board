@@ -2,27 +2,18 @@ package com.example.cloneboard.service.posts;
 
 import com.example.cloneboard.dao.boards.BoardRepository;
 import com.example.cloneboard.dao.users.UserRepository;
-import com.example.cloneboard.dto.boards.BoardResponseDto;
 import com.example.cloneboard.dto.boards.BoardSaveRequestDto;
 import com.example.cloneboard.dto.boards.BoardUpdateRequestDto;
-import com.example.cloneboard.dto.pages.PageInfo;
-import com.example.cloneboard.dto.pages.PaginatedPosts;
+import com.example.cloneboard.dto.pages.PaginationResponse;
 import com.example.cloneboard.entity.BoardEntity;
 import com.example.auth.dto.users.UserAuthorizedDto;
-import com.example.auth.service.users.UserAuthorizationService;
 import com.example.cloneboard.entity.UserEntity;
 import com.example.cloneboard.utils.PaginationMethods;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Primary
@@ -49,33 +40,14 @@ public class BoardServiceImpl implements BoardService {
         }
     }
 
-//    @Override
-//    public List<BoardResponseDto> findOnes(String nickname){  // find one's posts by nickname
-//        List<BoardEntity> posts = boardRepository.findByNickname(nickname);
-//        return posts.stream().map(BoardResponseDto::new).collect(Collectors.toList());  // parse entity list to dto list
-//    }
-
     @Override
-    public ResponseEntity findOnesPagination(int page, int size, String nickname){
-        return new ResponseEntity(
-                paginationMethods.getPaginatedPost(page, size, nickname),
-                HttpStatus.OK
-        );
+    public PaginationResponse findOnesPagination(int page, int size, String nickname){
+        return paginationMethods.getPaginatedPost(page, size, nickname);
     }
 
-//    @Override
-//    public List<BoardResponseDto> findAll(){  // find all posts
-//        List<BoardEntity> posts = boardRepository.findAll();
-//
-//        return posts.stream().map(BoardResponseDto::new).collect(Collectors.toList());  // parse entity list to dto list
-//    }
-
     @Override
-    public ResponseEntity findAllPagination(int page, int size){
-        return new ResponseEntity(
-                paginationMethods.getPaginatedPost(page, size),
-                HttpStatus.OK
-        );
+    public PaginationResponse findAllPagination(int page, int size){
+        return paginationMethods.getPaginatedPost(page, size);
     }
 
     @Transactional
