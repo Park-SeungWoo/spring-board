@@ -10,8 +10,10 @@ import java.util.List;
 
 public interface BoardService {
     public ResponseEntity<String> post(BoardSaveRequestDto boardSaveRequestDto, UserAuthorizedDto user);
-    public List<BoardResponseDto> findOnes(String nickname);
-    public List<BoardResponseDto> findAll();
+//    public List<BoardResponseDto> findOnes(String nickname);
+//    public List<BoardResponseDto> findAll();
     public ResponseEntity<String> delete(Long id, String nickname, UserAuthorizedDto user);
     public ResponseEntity<String> update(Long id, String nickname, BoardUpdateRequestDto boardUpdateRequestDto, UserAuthorizedDto user);
+    public ResponseEntity findAllPagination(int page, int size);
+    public ResponseEntity findOnesPagination(int page, int size, String nickname);
 }

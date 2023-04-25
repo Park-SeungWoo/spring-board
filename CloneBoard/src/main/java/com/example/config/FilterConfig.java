@@ -11,6 +11,7 @@ import org.springframework.core.Ordered;
 @Configuration
 @RequiredArgsConstructor
 public class FilterConfig {
+    // custom authorization filter
     private final UserAuthorizationService userAuthorizationService;
     @Bean  // filter를 빈으로 등록
     public FilterRegistrationBean authFilter(){

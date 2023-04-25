@@ -6,6 +6,7 @@ import com.example.cloneboard.dto.boards.BoardSaveRequestDto;
 import com.example.cloneboard.dto.boards.BoardUpdateRequestDto;
 import com.example.cloneboard.service.posts.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,13 +27,45 @@ public class BoardController {
     }
 
     @GetMapping("/{nickname}")
-    public List<BoardResponseDto> findOnes(@PathVariable("nickname") String nickname){
-        return boardService.findOnes(nickname);
+    public ResponseEntity findOnes(@PathVariable String nickname){
+        return boardService.findOnesPagination(1, 10, nickname);
+    }
+
+    @GetMapping(value = "/{nickname}", params = {"page"})
+    public ResponseEntity findOnes(
+            @PathVariable String nickname,
+            @RequestParam int page
+    ){
+        return boardService.findOnesPagination(page, 10, nickname);
+    }
+
+    @GetMapping(value = "/{nickname}", params = {"page", "size"})
+    public ResponseEntity findOnes(
+            @PathVariable String nickname,
+            @RequestParam int page,
+            @RequestParam int size
+    ){
+        return boardService.findOnesPagination(page, size, nickname);
     }
 
     @GetMapping
-    public List<BoardResponseDto> findAll(){
-        return boardService.findAll();
+    public ResponseEntity findAll(){
+        return boardService.findAllPagination(1, 10);
+    }
+
+    @GetMapping(params = {"page"})
+    public ResponseEntity findAll(
+            @RequestParam int page
+    ){
+        return boardService.findAllPagination(page, 10);
+    }
+
+    @GetMapping(params = {"page", "size"})
+    public ResponseEntity findAll(
+            @RequestParam int page,
+            @RequestParam int size
+    ){
+        return boardService.findAllPagination(page, size);
     }
 
     @PatchMapping("/{nickname}/{id}")  // patch는 부분변경, put은 전체데이터 갈아끼우기(patch는 멱등성을 보장해주진 않음)
