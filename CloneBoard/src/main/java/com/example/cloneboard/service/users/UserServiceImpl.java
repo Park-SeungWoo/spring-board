@@ -5,6 +5,7 @@ import com.example.cloneboard.dto.users.UserAuthenticationRequestDto;
 import com.example.cloneboard.dto.users.UserJoinRequestDto;
 import com.example.cloneboard.entity.UserEntity;
 import com.example.cloneboard.jwt.JwtProvider;
+import com.example.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
     public boolean signIn(UserAuthenticationRequestDto userAuthenticationRequestDto, HttpServletResponse response) {
         UserEntity user = userRepository.findByEmailAndPassword(userAuthenticationRequestDto.getEmail(), userAuthenticationRequestDto.getPassword());
         if (user != null) {
-            response.setHeader("Authorization", jwtProvider.createAccessToken(userAuthenticationRequestDto.getEmail()));
+            response.setHeader("Authorization", jwtProvider.createAccessToken(userAuthenticationRequestDto.getEmail(), user.getUserRole()));
             return true;
         } else {
             response.setHeader("Authorization", "user not exists");

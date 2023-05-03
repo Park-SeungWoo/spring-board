@@ -1,6 +1,7 @@
 package com.example.cloneboard.dto.users;
 
 import com.example.cloneboard.entity.UserEntity;
+import com.example.enums.UserRole;
 import lombok.Getter;
 
 /*
@@ -23,6 +24,7 @@ public class UserJoinRequestDto {
     private String password;
     private String nickname;
     private String introduce;
+    private UserRole userRole;
 
     public UserEntity toEntity(){
         return UserEntity.builder()
@@ -31,6 +33,7 @@ public class UserJoinRequestDto {
                 .nickname(this.nickname)
                 .introduce(this.introduce)
                 .postSequence(1L)
+                .userRole(this.userRole)
                 .build();
     }
 }

@@ -12,6 +12,6 @@
 - 현재 간단한 로그인, 유저 생성, 게시판 CRUD까지 구현 한 상태입니다.
 - 게시판은 전체 글에 대한 id값과 user별 게시글 id값이 존재합니다. user별 id는 user table의 postSequence값을 하나씩 증가시키며 진행합니다. 게시글의 모든 update, delete는 postId로 진행합니다.
 - 게시글 조회는 pagination을 애용해 page=1, size=10을 default로 전체 게시글 조회, 사용자별 게시글 조회에 적용됩니다.
-- 현재 JWT로 인증, 인가를 하도록 구현했습니다.
-- 인가는 security 사용 없이, custom filter에서 진행해 jwt validation만 진행 한 후 권한 관계없이 token이 valid하면 인가해줬습니다.
-- 다음 업데이트에서 권한 추가 및 spring security를 이용해 인증, 인가를 진행할 예정입니다.
+- 현재 JWT를 이용해 인증, 인가를 하도록 구현했습니다.
+- 인증은 security의 filter chain에 custom filter를 넣어 해당 filter에서 request의 header로 들어온 jwt를 받아와 validate하고 token내부의 유저 정보를 security context에 저장하도록 구현했습니다.
+- 인가는 security config에서 antmatcher를 사용해 특정 uri, method로 요청이 들어올 시 권한 체크를 하도록 했고 요청과 함께 온 토큰에 필요 권한이 있는지 여부 확인은 인증 시 security context에 유저 정보를 저장함으로써 spring security가 자동으로 context에서 꺼내와 권한 체크를 할 수 있도록 했습니다.

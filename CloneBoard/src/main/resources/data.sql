@@ -1,8 +1,8 @@
 use potato;
 truncate users;
 truncate boards;
-insert into users(email, introduce, nickname, password, post_sequence) values("test1@naver.com", "Hi i'm test1", "test1", "test1", 1);
-insert into users(email, introduce, nickname, password, post_sequence) values("test2@naver.com", "Hi i'm test2", "test2", "test2", 1);
+insert into users(email, introduce, nickname, password, post_sequence, user_role) values("test1@naver.com", "Hi i'm test1", "test1", "test1", 1, "USER");
+insert into users(email, introduce, nickname, password, post_sequence, user_role) values("test2@naver.com", "Hi i'm test2", "test2", "test2", 1, "USER");
 
 insert into boards(content, nickname, post_id, title) values("this is a post", "test1", 1, "1");
 insert into boards(content, nickname, post_id, title) values("this is a post", "test1", 2, "2");

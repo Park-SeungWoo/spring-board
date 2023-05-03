@@ -1,9 +1,13 @@
 package com.example.cloneboard.jwt;
 
+import com.example.cloneboard.service.jwt.CustomUserDetailService;
+import com.example.enums.UserRole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +17,7 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
+    private final CustomUserDetailService customUserDetailService;
     @Value("${jwt.secret}")
     private String secreKey;
     @Value("${jwt.access-token-validity}")
@@ -20,13 +25,13 @@ public class JwtProvider {
     @Value("${jwt.refresh-token-validity}")
     private long refreshTokenValidTime;
 
-    public String createAccessToken(String email) {
-        return this.createToken(email, accessTokenValidTime);
+    public String createAccessToken(String email, UserRole role) {
+        return this.createToken(email, role, accessTokenValidTime);
     }
 
-    private String createToken(String email, long tokenValidTime) {
+    private String createToken(String email, UserRole role, long tokenValidTime) {
         Claims claims = Jwts.claims().setSubject(email);  // create a claim and set payload
-        // must set a role
+        claims.put("roles", role.toString());  // set role
 
         Key key = Keys.hmacShaKeyFor(secreKey.getBytes());  // encrypt secret with HS256
         Date date = new Date();  // current time
@@ -37,14 +42,6 @@ public class JwtProvider {
                 .setExpiration(new Date(date.getTime() + tokenValidTime))  // set token validation time
                 .signWith(key, SignatureAlgorithm.HS256)  // set hashing algorithm, key (HS256)
                 .compact();  // create
-    }
-
-    // get email from token
-    public String getUserEmail(String token){
-        JwtParser jwtParser = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(secreKey.getBytes()))
-                .build();
-        return jwtParser.parseClaimsJws(token).getBody().getSubject();
     }
 
     // resolve access token from header
@@ -80,4 +77,20 @@ public class JwtProvider {
         }
     }
 
+    // 유저의 권한 정보를 security context에 저장하기 위해 token에서 권한정보 빼오기
+    // 지금까지는 token의 유효성만 검사했음 따라서 이제 토큰에 저장되어있는 유저정보를 가지고 유저 존재 확인, 권한 확인 진행해야함
+    // 그 과정을 이 메서드에서 수행하고 우리가 만든 필터에서 이 함수를 통해 인증된 유저 정보(권한 등등)를 받아 security context에 저장함
+    // 저장되어있는 정보를 바탕으로 spring security에서 권한 확인 후 인가 과정 수행
+    public UsernamePasswordAuthenticationToken getAuthentication(String token){
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(this.getUserEmail(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    // get email from token
+    public String getUserEmail(String token){
+        JwtParser jwtParser = Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(secreKey.getBytes()))
+                .build();
+        return jwtParser.parseClaimsJws(token).getBody().getSubject();
+    }
 }
