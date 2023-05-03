@@ -1,28 +1,45 @@
 package com.example.cloneboard.service.users;
 
-import com.example.auth.dto.users.UserAuthorizedDto;
-import com.example.cloneboard.dao.boards.BoardRepository;
 import com.example.cloneboard.dao.users.UserRepository;
+import com.example.cloneboard.dto.users.UserAuthenticationRequestDto;
 import com.example.cloneboard.dto.users.UserJoinRequestDto;
-import com.example.cloneboard.dto.users.UserResponseDto;
+import com.example.cloneboard.entity.UserEntity;
+import com.example.cloneboard.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
 
 @Service
 @Primary
 @RequiredArgsConstructor  // final, not null로 선언된 필드 생성자 자동 생성
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final BoardRepository boardRepository;
+
+    private final JwtProvider jwtProvider;
+
+    /*
+    토큰 정보와 게시글 작성, 업데이트, 삭제 요청 내부의 정보 확인 즉 토큰 속 정보와, 실제 토큰 사용자를 체크하는 것은 추후에 진행하기
+     */
 
     @Transactional
     @Override
-    public ResponseEntity<String> join(UserJoinRequestDto userJoinRequestDto){  // save a user
+    public ResponseEntity<String> delete(String email) {  // delete a user by email
+        try {
+            userRepository.deleteByEmail(email);
+            // delete user's posts
+            return ResponseEntity.ok("성공: 성공적으로 탈퇴했습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<String> signUp(UserJoinRequestDto userJoinRequestDto) {  // save a user
         try {
             userRepository.save(userJoinRequestDto.toEntity());
             return ResponseEntity.ok("성공: 회원가입이 성공적으로 완료되었습니다.");
@@ -32,24 +49,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto findOne(String email){  // find a user by email
-        return userRepository.findByEmail(email).stream().map(UserResponseDto::new).collect(Collectors.toList()).get(0);
-        // parse 1 length of UserEntity list(found user) to UserResponseDto
-    }
-
-    @Transactional
-    @Override
-    public ResponseEntity<String> delete(String email, UserAuthorizedDto authorizedUser){  // delete a user by email
-        try {
-            if(authorizedUser.getEmail().equals(email)) {
-                userRepository.deleteByEmail(email);
-                boardRepository.deleteByNickname(authorizedUser.getNickname());
-                return ResponseEntity.ok("성공: 성공적으로 탈퇴했습니다.");
-            } else {
-                return ResponseEntity.ok("실패: 유저 정보가 다릅니다.");
-            }
-        } catch (Exception e){
-            return ResponseEntity.ok(e.getMessage());
+    public boolean signIn(UserAuthenticationRequestDto userAuthenticationRequestDto, HttpServletResponse response) {
+        UserEntity user = userRepository.findByEmailAndPassword(userAuthenticationRequestDto.getEmail(), userAuthenticationRequestDto.getPassword());
+        if (user != null) {
+            response.setHeader("Authorization", jwtProvider.createAccessToken(userAuthenticationRequestDto.getEmail()));
+            return true;
+        } else {
+            response.setHeader("Authorization", "user not exists");
+            return false;
         }
     }
 }

@@ -1,12 +1,15 @@
 package com.example.cloneboard.service.users;
 
-import com.example.auth.dto.users.UserAuthorizedDto;
+import com.example.cloneboard.dto.users.UserAuthenticationRequestDto;
 import com.example.cloneboard.dto.users.UserJoinRequestDto;
-import com.example.cloneboard.dto.users.UserResponseDto;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface UserService {
-    public ResponseEntity<String> join(UserJoinRequestDto userJoinRequestDto);
-    public UserResponseDto findOne(String email);
-    public ResponseEntity<String> delete(String email, UserAuthorizedDto authorizedUser);
+    public ResponseEntity<String> signUp(UserJoinRequestDto userJoinRequestDto);
+
+    public ResponseEntity<String> delete(String email);
+
+    public boolean signIn(UserAuthenticationRequestDto userAuthenticationRequestDto, HttpServletResponse response);
 }

@@ -25,3 +25,4 @@ jwt:
   header: Authorization
   secret: 54397225e6e1676523acdaba48df130881ab3474cde82e08ceb401637ca0505ed0cc62477b843723d2439648b117619f7d939954bf317d0474394eb261ba1ba9
   access-token-validity: 60000 # 1 min
+  refresh-token-validity: 60000 # 1 min
